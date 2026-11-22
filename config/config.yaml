@@ -1,0 +1,60 @@
+# FedShield Master Configuration File
+
+system:
+  random_seed: 42
+  device: "auto"        # "auto", "cuda", or "cpu"
+  num_workers: 0        # 0 recommended on Windows to avoid multiprocessing issues
+
+dataset:
+  name: "cifar10"
+  data_dir: "./data"
+  download: true
+  num_classes: 10
+  image_size: [32, 32]
+  in_channels: 3
+
+model:
+  name: "lightweight_cnn"
+  in_channels: 3
+  num_classes: 10
+
+centralized:
+  epochs: 5
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  quick_mode_samples: 2000    # Subsample for quick verification mode
+
+federated:
+  algorithm: "fedavg"          # "fedavg", "fedprox"
+  num_clients: 10
+  client_fraction: 1.0         # Fraction of clients participating per round
+  communication_rounds: 10
+  local_epochs: 2
+  local_batch_size: 32
+  local_learning_rate: 0.001
+  weight_decay: 0.0001
+  fedprox_mu: 0.01
+
+partition:
+  type: "iid"                  # "iid", "non_iid_dirichlet"
+  dirichlet_alpha: 0.5         # Lower alpha = stronger heterogeneity (0.1, 0.5, 1.0, 10.0)
+  imbalance: false             # Set true for varying client sample counts
+
+security:
+  malicious_client_fraction: 0.0   # 0.0, 0.1, 0.2, 0.3
+  attack_type: "sign_flipping"     # "sign_flipping", "update_scaling"
+  scaling_factor: 2.0
+  aggregation_method: "fedavg"     # "fedavg", "coordinate_median", "trimmed_mean"
+  trimmed_mean_beta: 0.2           # Fraction to trim from each end (0.0 to 0.49)
+
+privacy:
+  dp_enabled: false
+  max_grad_norm: 1.0
+  noise_multiplier: 0.5            # Standard deviation scale for Gaussian noise
+  clip_per_sample: false
+
+logging:
+  results_dir: "./experiments/results"
+  save_plots: true
+  log_level: "INFO"
