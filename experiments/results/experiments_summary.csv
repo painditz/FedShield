@@ -1,0 +1,15 @@
+experiment_id,timestamp,algorithm,num_clients,partition_type,dirichlet_alpha,malicious_fraction,aggregation_method,dp_enabled,noise_multiplier,final_accuracy,final_loss,final_f1,training_time_s,status
+centralized_quick_1789623870,2026-09-17T11:14:30.234623,centralized,1,N/A,N/A,0.0,fedavg,False,0.0,38.0,1.7009,0.3613,5.23,COMPLETED
+benchmark_fedavg_iid_quick,2026-11-23T04:09:14.572938,fedavg,5,iid,0.5,0.0,fedavg,False,0.5,29.8,1.9391,0.2407,4.23,COMPLETED
+benchmark_fedavg_non_iid_0.5_quick,2026-11-23T04:09:20.228132,fedavg,5,non_iid_dirichlet,0.5,0.0,fedavg,False,0.5,22.6,2.0403,0.1622,4.16,COMPLETED
+benchmark_fedprox_non_iid_0.1_quick,2026-11-23T04:09:25.810682,fedprox,5,non_iid_dirichlet,0.1,0.0,fedavg,False,0.5,20.2,2.1246,0.1405,4.83,COMPLETED
+benchmark_attack_fedavg_vulnerable_quick,2026-11-23T04:09:32.074299,fedavg,5,iid,0.5,0.2,fedavg,False,0.5,11.4,nan,0.0205,4.89,COMPLETED
+benchmark_defense_trimmed_mean_quick,2026-11-23T04:09:38.477467,fedavg,5,iid,0.5,0.2,trimmed_mean,False,0.5,11.4,nan,0.0205,4.57,COMPLETED
+benchmark_dp_fedavg_noise_0.5_quick,2026-11-23T04:09:44.423215,fedavg,5,iid,0.5,0.0,fedavg,True,0.5,10.0,496.7858,0.0573,5.3,COMPLETED
+benchmark_fedavg_iid_quick,2026-11-23T04:11:05.060772,fedavg,5,iid,0.5,0.0,fedavg,False,0.5,29.8,1.9391,0.2407,10.7,COMPLETED
+benchmark_fedavg_non_iid_0.5_quick,2026-11-23T04:11:18.680317,fedavg,5,non_iid_dirichlet,0.5,0.0,fedavg,False,0.5,22.6,2.0403,0.1622,10.56,COMPLETED
+benchmark_fedprox_non_iid_0.1_quick,2026-11-23T04:11:31.988359,fedprox,5,non_iid_dirichlet,0.1,0.0,fedavg,False,0.5,20.2,2.1246,0.1405,12.59,COMPLETED
+benchmark_attack_fedavg_vulnerable_quick,2026-11-23T04:11:47.552140,fedavg,5,iid,0.5,0.2,fedavg,False,0.5,22.2,2.1783,0.1598,13.3,COMPLETED
+benchmark_defense_coordinate_median_quick,2026-11-23T04:12:03.627180,fedavg,5,iid,0.5,0.2,coordinate_median,False,0.5,28.4,1.9908,0.2375,10.56,COMPLETED
+benchmark_defense_trimmed_mean_quick,2026-11-23T04:12:17.076945,fedavg,5,iid,0.5,0.2,trimmed_mean,False,0.5,28.4,2.0076,0.2182,10.49,COMPLETED
+benchmark_dp_fedavg_noise_0.5_quick,2026-11-23T04:12:30.511373,fedavg,5,iid,0.5,0.0,fedavg,True,0.5,10.0,496.7858,0.0573,12.32,COMPLETED

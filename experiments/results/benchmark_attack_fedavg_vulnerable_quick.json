@@ -1,0 +1,260 @@
+{
+  "experiment_id": "benchmark_attack_fedavg_vulnerable_quick",
+  "timestamp": "2026-11-23T04:11:47.552140",
+  "config": {
+    "system": {
+      "random_seed": 42,
+      "device": "auto",
+      "num_workers": 0
+    },
+    "dataset": {
+      "name": "cifar10",
+      "data_dir": "./data",
+      "download": true,
+      "num_classes": 10,
+      "image_size": [
+        32,
+        32
+      ],
+      "in_channels": 3
+    },
+    "model": {
+      "name": "lightweight_cnn",
+      "in_channels": 3,
+      "num_classes": 10
+    },
+    "centralized": {
+      "epochs": 5,
+      "batch_size": 64,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "quick_mode_samples": 1500
+    },
+    "federated": {
+      "algorithm": "fedavg",
+      "num_clients": 5,
+      "client_fraction": 1.0,
+      "communication_rounds": 3,
+      "local_epochs": 1,
+      "local_batch_size": 32,
+      "local_learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "fedprox_mu": 0.01
+    },
+    "partition": {
+      "type": "iid",
+      "dirichlet_alpha": 0.5,
+      "imbalance": false
+    },
+    "security": {
+      "malicious_client_fraction": 0.2,
+      "attack_type": "sign_flipping",
+      "scaling_factor": 2.0,
+      "aggregation_method": "fedavg",
+      "trimmed_mean_beta": 0.2
+    },
+    "privacy": {
+      "dp_enabled": false,
+      "max_grad_norm": 1.0,
+      "noise_multiplier": 0.5,
+      "clip_per_sample": false
+    },
+    "logging": {
+      "results_dir": "./experiments/results",
+      "save_plots": true,
+      "log_level": "INFO"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "participating_clients": 5,
+      "malicious_clients": 1,
+      "client_mean_train_loss": 2.2891,
+      "client_mean_train_acc": 13.53,
+      "test_loss": 2.2915,
+      "test_accuracy": 14.2,
+      "test_f1": 0.0535,
+      "test_precision": 0.0479,
+      "test_recall": 0.1311,
+      "mb_round_comm": 13.69,
+      "cumulative_mb": 13.69,
+      "privacy": {
+        "dp_enabled": false,
+        "epsilon": null,
+        "delta": null
+      }
+    },
+    {
+      "round": 2,
+      "participating_clients": 5,
+      "malicious_clients": 1,
+      "client_mean_train_loss": 2.1919,
+      "client_mean_train_acc": 16.87,
+      "test_loss": 2.2387,
+      "test_accuracy": 17.2,
+      "test_f1": 0.1037,
+      "test_precision": 0.1431,
+      "test_recall": 0.1716,
+      "mb_round_comm": 13.69,
+      "cumulative_mb": 27.38,
+      "privacy": {
+        "dp_enabled": false,
+        "epsilon": null,
+        "delta": null
+      }
+    },
+    {
+      "round": 3,
+      "participating_clients": 5,
+      "malicious_clients": 1,
+      "client_mean_train_loss": 2.1373,
+      "client_mean_train_acc": 19.53,
+      "test_loss": 2.1783,
+      "test_accuracy": 22.2,
+      "test_f1": 0.1598,
+      "test_precision": 0.1928,
+      "test_recall": 0.2088,
+      "mb_round_comm": 13.69,
+      "cumulative_mb": 41.07,
+      "privacy": {
+        "dp_enabled": false,
+        "epsilon": null,
+        "delta": null
+      }
+    }
+  ],
+  "final_metrics": {
+    "loss": 2.1783,
+    "accuracy": 22.2,
+    "precision": 0.1928,
+    "recall": 0.2088,
+    "f1_score": 0.1598,
+    "confusion_matrix": [
+      [
+        36,
+        2,
+        2,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        14
+      ],
+      [
+        15,
+        8,
+        1,
+        2,
+        0,
+        5,
+        1,
+        0,
+        0,
+        9
+      ],
+      [
+        21,
+        4,
+        17,
+        1,
+        1,
+        5,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        13,
+        4,
+        14,
+        5,
+        0,
+        8,
+        1,
+        1,
+        0,
+        3
+      ],
+      [
+        8,
+        1,
+        17,
+        3,
+        0,
+        6,
+        0,
+        1,
+        0,
+        4
+      ],
+      [
+        22,
+        0,
+        11,
+        4,
+        0,
+        6,
+        0,
+        1,
+        0,
+        4
+      ],
+      [
+        8,
+        2,
+        20,
+        6,
+        0,
+        15,
+        2,
+        0,
+        0,
+        1
+      ],
+      [
+        15,
+        3,
+        7,
+        7,
+        0,
+        3,
+        0,
+        1,
+        0,
+        11
+      ],
+      [
+        44,
+        2,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        9
+      ],
+      [
+        14,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        0,
+        36
+      ]
+    ],
+    "sample_count": 500,
+    "best_round_accuracy": 22.2
+  },
+  "training_time_seconds": 13.3,
+  "status": "COMPLETED"
+}

@@ -1,0 +1,164 @@
+{
+  "experiment_id": "centralized_quick_1789623870",
+  "timestamp": "2026-09-17T11:14:30.234623",
+  "config": {
+    "algorithm": "centralized",
+    "mode": "quick",
+    "epochs": 2,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "device": "cpu",
+    "param_count": 357002,
+    "model_size_bytes": 1435047
+  },
+  "rounds": [
+    {
+      "epoch": 1,
+      "train_loss": 2.0346,
+      "train_acc": 24.3,
+      "test_loss": 1.86,
+      "test_accuracy": 30.8,
+      "epoch_duration_s": 2.04
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.7877,
+      "train_acc": 32.55,
+      "test_loss": 1.7009,
+      "test_accuracy": 38.0,
+      "epoch_duration_s": 1.89
+    }
+  ],
+  "final_metrics": {
+    "loss": 1.7009,
+    "accuracy": 38.0,
+    "precision": 0.397,
+    "recall": 0.375,
+    "f1_score": 0.3613,
+    "confusion_matrix": [
+      [
+        45,
+        2,
+        7,
+        2,
+        1,
+        0,
+        1,
+        2,
+        31,
+        4
+      ],
+      [
+        8,
+        41,
+        2,
+        1,
+        0,
+        1,
+        0,
+        2,
+        25,
+        19
+      ],
+      [
+        15,
+        2,
+        34,
+        9,
+        6,
+        1,
+        11,
+        8,
+        7,
+        1
+      ],
+      [
+        17,
+        3,
+        16,
+        40,
+        0,
+        7,
+        14,
+        4,
+        3,
+        3
+      ],
+      [
+        9,
+        1,
+        25,
+        6,
+        9,
+        1,
+        24,
+        11,
+        4,
+        0
+      ],
+      [
+        7,
+        1,
+        20,
+        23,
+        0,
+        12,
+        14,
+        6,
+        3,
+        0
+      ],
+      [
+        0,
+        0,
+        16,
+        10,
+        1,
+        2,
+        63,
+        7,
+        1,
+        1
+      ],
+      [
+        8,
+        2,
+        9,
+        19,
+        7,
+        12,
+        10,
+        42,
+        4,
+        3
+      ],
+      [
+        21,
+        4,
+        2,
+        3,
+        0,
+        0,
+        1,
+        1,
+        61,
+        8
+      ],
+      [
+        7,
+        9,
+        0,
+        5,
+        0,
+        0,
+        8,
+        4,
+        45,
+        33
+      ]
+    ],
+    "sample_count": 1000
+  },
+  "training_time_seconds": 5.23,
+  "status": "COMPLETED"
+}
