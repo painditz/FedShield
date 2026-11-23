@@ -13,3 +13,5 @@ benchmark_attack_fedavg_vulnerable_quick,2026-11-23T04:11:47.552140,fedavg,5,iid
 benchmark_defense_coordinate_median_quick,2026-11-23T04:12:03.627180,fedavg,5,iid,0.5,0.2,coordinate_median,False,0.5,28.4,1.9908,0.2375,10.56,COMPLETED
 benchmark_defense_trimmed_mean_quick,2026-11-23T04:12:17.076945,fedavg,5,iid,0.5,0.2,trimmed_mean,False,0.5,28.4,2.0076,0.2182,10.49,COMPLETED
 benchmark_dp_fedavg_noise_0.5_quick,2026-11-23T04:12:30.511373,fedavg,5,iid,0.5,0.0,fedavg,True,0.5,10.0,496.7858,0.0573,12.32,COMPLETED
+web_fedavg_iid_1795390950,2026-11-23T05:12:33.464208,fedavg,5,iid,0.35,0.0,fedavg,False,0.0,30.2,2.0355,0.2564,7.08,COMPLETED
+web_fedavg_iid_1795418807,2026-11-23T12:56:52.399171,fedavg,5,iid,0.55,0.0,fedavg,False,0.0,30.2,2.0355,0.2564,11.77,COMPLETED

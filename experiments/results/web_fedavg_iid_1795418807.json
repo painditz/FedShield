@@ -1,0 +1,241 @@
+{
+  "experiment_id": "web_fedavg_iid_1795418807",
+  "timestamp": "2026-11-23T12:56:52.399171",
+  "config": {
+    "system": {
+      "random_seed": 42,
+      "device": "auto",
+      "num_workers": 0
+    },
+    "dataset": {
+      "name": "cifar10",
+      "data_dir": "./data",
+      "download": true,
+      "num_classes": 10,
+      "image_size": [
+        32,
+        32
+      ],
+      "in_channels": 3
+    },
+    "model": {
+      "name": "lightweight_cnn",
+      "in_channels": 3,
+      "num_classes": 10
+    },
+    "centralized": {
+      "epochs": 5,
+      "batch_size": 64,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "quick_mode_samples": 1500
+    },
+    "federated": {
+      "algorithm": "fedavg",
+      "num_clients": 5,
+      "client_fraction": 1.0,
+      "communication_rounds": 2,
+      "local_epochs": 1,
+      "local_batch_size": 32,
+      "local_learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "fedprox_mu": 0.01
+    },
+    "partition": {
+      "type": "iid",
+      "dirichlet_alpha": 0.55,
+      "imbalance": false
+    },
+    "security": {
+      "malicious_client_fraction": 0.0,
+      "attack_type": "sign_flipping",
+      "scaling_factor": 2.0,
+      "aggregation_method": "fedavg",
+      "trimmed_mean_beta": 0.2
+    },
+    "privacy": {
+      "dp_enabled": false,
+      "max_grad_norm": 1.0,
+      "noise_multiplier": 0.0,
+      "clip_per_sample": false
+    },
+    "logging": {
+      "results_dir": "./experiments/results",
+      "save_plots": true,
+      "log_level": "INFO"
+    }
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "participating_clients": 5,
+      "malicious_clients": 0,
+      "client_mean_train_loss": 2.2891,
+      "client_mean_train_acc": 13.53,
+      "test_loss": 2.286,
+      "test_accuracy": 21.0,
+      "test_f1": 0.1288,
+      "test_precision": 0.1145,
+      "test_recall": 0.2081,
+      "mb_round_comm": 13.69,
+      "cumulative_mb": 13.69,
+      "privacy": {
+        "dp_enabled": false,
+        "epsilon": null,
+        "delta": null
+      }
+    },
+    {
+      "round": 2,
+      "participating_clients": 5,
+      "malicious_clients": 0,
+      "client_mean_train_loss": 2.1458,
+      "client_mean_train_acc": 22.4,
+      "test_loss": 2.0355,
+      "test_accuracy": 30.2,
+      "test_f1": 0.2564,
+      "test_precision": 0.2771,
+      "test_recall": 0.2925,
+      "mb_round_comm": 13.69,
+      "cumulative_mb": 27.38,
+      "privacy": {
+        "dp_enabled": false,
+        "epsilon": null,
+        "delta": null
+      }
+    }
+  ],
+  "final_metrics": {
+    "loss": 2.0355,
+    "accuracy": 30.2,
+    "precision": 0.2771,
+    "recall": 0.2925,
+    "f1_score": 0.2564,
+    "confusion_matrix": [
+      [
+        27,
+        2,
+        1,
+        0,
+        0,
+        0,
+        4,
+        1,
+        12,
+        10
+      ],
+      [
+        4,
+        7,
+        2,
+        1,
+        2,
+        0,
+        3,
+        0,
+        15,
+        7
+      ],
+      [
+        14,
+        1,
+        8,
+        1,
+        10,
+        1,
+        10,
+        3,
+        3,
+        0
+      ],
+      [
+        5,
+        4,
+        9,
+        0,
+        10,
+        1,
+        12,
+        4,
+        2,
+        2
+      ],
+      [
+        4,
+        0,
+        4,
+        0,
+        19,
+        0,
+        6,
+        0,
+        2,
+        5
+      ],
+      [
+        13,
+        0,
+        7,
+        1,
+        11,
+        1,
+        6,
+        7,
+        0,
+        2
+      ],
+      [
+        2,
+        1,
+        5,
+        0,
+        12,
+        0,
+        29,
+        1,
+        1,
+        3
+      ],
+      [
+        8,
+        3,
+        5,
+        0,
+        11,
+        0,
+        2,
+        8,
+        2,
+        8
+      ],
+      [
+        23,
+        1,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        25,
+        5
+      ],
+      [
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        3,
+        2,
+        21,
+        27
+      ]
+    ],
+    "sample_count": 500,
+    "best_round_accuracy": 30.2
+  },
+  "training_time_seconds": 11.77,
+  "status": "COMPLETED"
+}

@@ -3,196 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FedShield - Federated Learning Security, Privacy & Robustness Platform</title>
-    <!-- Chart.js -->
+    <title>FedShield - Federated Learning Security & Privacy Dashboard</title>
+    <!-- Chart.js for clean, responsive charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --bg-base: #090d16;
-            --bg-surface: #111827;
-            --bg-card: #182234;
-            --bg-card-hover: #1e2c42;
-            --border: #24344d;
-            --border-highlight: #3b82f6;
-            --text-main: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --bg-page: #0a0f1d;
+            --bg-card: #131d31;
+            --bg-card-hover: #17233b;
+            --bg-input: #0e1526;
+            --border: #212e4a;
+            --border-focus: #3b82f6;
+            --text-heading: #ffffff;
+            --text-body: #e2e8f0;
+            --text-muted: #8e9db7;
             --primary: #3b82f6;
-            --primary-glow: rgba(59, 130, 246, 0.25);
+            --primary-hover: #2563eb;
             --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.2);
             --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.2);
             --warning: #f59e0b;
             --purple: #8b5cf6;
-            --purple-glow: rgba(139, 92, 246, 0.2);
-            --radius-md: 10px;
-            --radius-lg: 16px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
-        body { background-color: var(--bg-base); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; min-height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-family); }
+        body { background-color: var(--bg-page); color: var(--text-body); line-height: 1.6; padding-bottom: 50px; font-size: 16px; }
 
-        /* Top Navigation Header */
-        .navbar {
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(12px);
+        /* Header Bar */
+        .header {
+            background-color: var(--bg-card);
             border-bottom: 1px solid var(--border);
-            padding: 14px 32px;
+            padding: 18px 36px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 50;
         }
-        .nav-brand {
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-logo {
+            font-size: 26px;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+        }
+        .header-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .header-actions {
             display: flex;
             align-items: center;
             gap: 14px;
-            font-size: 1.35rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
         }
-        .nav-brand i { color: var(--primary); font-size: 1.6rem; filter: drop-shadow(0 0 10px var(--primary-glow)); }
-        .nav-brand span.subtitle { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); margin-left: 6px; }
-
-        .nav-status {
+        .status-badge {
+            background-color: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 8px;
         }
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 5px 12px;
-            border-radius: 9999px;
-            font-size: 0.75rem;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+        }
+        .btn-download {
+            background-color: var(--bg-input);
+            color: var(--text-body);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
         }
-        .pill-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .btn-download:hover {
+            background-color: #1e293b;
+            color: #fff;
+            border-color: #475569;
+        }
 
-        /* Main Container */
-        .container { max-width: 1440px; margin: 0 auto; padding: 28px 32px; }
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 28px 24px;
+        }
 
-        /* KPI Cards Grid */
-        .kpi-grid {
+        /* Top KPI Stats */
+        .kpi-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 18px;
             margin-bottom: 28px;
         }
-        .kpi-card {
-            background: var(--bg-card);
+        .kpi-box {
+            background-color: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 20px 24px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.25s ease;
+            border-radius: 12px;
+            padding: 20px 22px;
+            transition: transform 0.2s, border-color 0.2s;
         }
-        .kpi-card:hover { transform: translateY(-3px); border-color: var(--border-highlight); box-shadow: 0 12px 24px -10px var(--primary-glow); }
-        .kpi-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--primary), transparent);
+        .kpi-box:hover {
+            border-color: var(--border-focus);
+            transform: translateY(-2px);
         }
-        .kpi-header { display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-        .kpi-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--primary); }
-        .kpi-value { font-size: 1.85rem; font-weight: 800; margin: 8px 0 4px; color: #fff; }
-        .kpi-sub { font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+        .kpi-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .kpi-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin: 6px 0 2px;
+        }
+        .kpi-hint {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
 
         /* Navigation Tabs */
-        .tabs-nav {
+        .nav-tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 28px;
+            margin-bottom: 26px;
             overflow-x: auto;
-            padding-bottom: 2px;
         }
-        .tab-btn {
-            background: transparent;
+        .tab-button {
+            background: none;
             border: none;
-            color: var(--text-secondary);
-            padding: 12px 20px;
-            font-size: 0.95rem;
+            color: var(--text-muted);
+            padding: 12px 22px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            border-radius: 8px 8px 0 0;
             border-bottom: 3px solid transparent;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
             transition: all 0.2s;
             white-space: nowrap;
         }
-        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
-        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(59, 130, 246, 0.08); }
+        .tab-button:hover {
+            color: var(--text-heading);
+        }
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: rgba(59, 130, 246, 0.06);
+            border-radius: 6px 6px 0 0;
+        }
 
-        .tab-pane { display: none; }
-        .tab-pane.active { display: block; animation: fadeIn 0.25s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* Content Cards & Sections */
-        .section-card {
-            background: var(--bg-surface);
+        /* Section Cards */
+        .card {
+            background-color: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 20px -2px rgba(0,0,0,0.3);
         }
-        .section-title {
-            font-size: 1.15rem;
+        .card-title {
+            font-size: 18px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
+            color: var(--text-heading);
+            margin-bottom: 6px;
         }
-        .section-desc { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-        /* Architecture Interactive Nodes */
-        .arch-nodes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
-        .arch-node {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        .arch-node:hover, .arch-node.active {
-            border-color: var(--primary);
-            background: var(--bg-card-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px var(--primary-glow);
-        }
-        .arch-node i { font-size: 1.8rem; margin-bottom: 8px; color: var(--primary); }
-        .arch-node h4 { font-size: 0.95rem; font-weight: 700; }
-        .arch-node p { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
-        .arch-detail-box {
-            background: #0b1120;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            font-size: 0.9rem;
-            line-height: 1.6;
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
         }
 
-        /* Tables & Filters */
-        .table-toolbar {
+        /* Benchmark Table */
+        .table-filter-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -200,568 +216,474 @@
             margin-bottom: 16px;
             flex-wrap: wrap;
         }
-        .search-box {
-            background: #0b1120;
+        .search-input {
+            background-color: var(--bg-input);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 14px;
             color: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 320px;
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+        .btn-refresh {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-refresh:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #0b1324;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            white-space: nowrap;
+        }
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-purple { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .accuracy-pill {
+            background: rgba(56, 189, 248, 0.12);
+            color: #38bdf8;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* 2-Column Grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        @media (max-width: 900px) {
+            .chart-grid { grid-template-columns: 1fr; }
+            .header { padding: 14px 18px; }
+            .container { padding: 18px 14px; }
+        }
+        .chart-box {
+            position: relative;
+            height: 350px;
+            margin-top: 10px;
+        }
+
+        /* Info Callout Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 22px;
+        }
+        .info-card {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+        }
+        .info-card h4 {
+            font-size: 15px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
-            min-width: 260px;
         }
-        .search-box input { background: transparent; border: none; outline: none; color: #fff; font-size: 0.85rem; width: 100%; }
-
-        .table-responsive { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
-        th { background: #0b1120; padding: 14px 16px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
-        td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-        tr:hover td { background: rgba(255,255,255,0.02); }
-
-        /* Badges */
-        .tag { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
-        .tag-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .tag-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .tag-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-        .tag-purple { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
-
-        /* Buttons */
-        .btn {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 9px 16px;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
+        .info-card p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.5;
         }
-        .btn:hover { background: #2563eb; transform: translateY(-1px); }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-        .btn-outline:hover { background: rgba(255,255,255,0.05); color: #fff; border-color: #64748b; }
 
         /* Form elements */
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px; }
-        .form-field { display: flex; flex-direction: column; gap: 6px; }
-        .form-field label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-        select, input[type="number"], input[type="text"] {
-            background: #0b1120;
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        select, input {
+            background-color: var(--bg-input);
             border: 1px solid var(--border);
             color: #fff;
             padding: 10px 14px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 14px;
             outline: none;
             transition: border-color 0.2s;
         }
-        select:focus, input:focus { border-color: var(--primary); }
-
-        /* Charts */
-        .chart-wrapper { height: 360px; position: relative; margin-top: 12px; }
-        .grid-split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        @media(max-width: 960px) { .grid-split { grid-template-columns: 1fr; } }
-
-        /* Terminal Console */
-        .terminal-console {
-            background: #050811;
-            border: 1px solid #1e293b;
-            border-radius: var(--radius-md);
-            padding: 16px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.825rem;
-            color: #38bdf8;
-            max-height: 260px;
-            overflow-y: auto;
-            line-height: 1.6;
+        select:focus, input:focus {
+            border-color: var(--primary);
         }
-
-        /* Heatmap Grid */
-        .heatmap-grid {
-            display: grid;
-            gap: 2px;
-            margin-top: 16px;
-            overflow-x: auto;
-        }
-        .heatmap-row { display: flex; gap: 3px; align-items: center; }
-        .heatmap-cell {
-            width: 38px;
-            height: 30px;
-            border-radius: 4px;
+        .preset-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #fff;
-            transition: transform 0.15s;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
         }
-        .heatmap-cell:hover { transform: scale(1.15); z-index: 10; cursor: default; }
-        .heatmap-label { width: 75px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-align: right; padding-right: 8px; }
+        .preset-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-body);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover {
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .btn-launch {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-launch:hover {
+            background-color: var(--primary-hover);
+        }
+        .btn-launch:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .alert-box {
+            display: none;
+            margin-top: 18px;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <header class="navbar">
-        <div class="nav-brand">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span>FedShield <span class="subtitle">| Trustworthy Federated Learning Platform</span></span>
+    <!-- Header Bar -->
+    <header class="header">
+        <div class="header-brand">
+            <span class="header-logo">🛡️</span>
+            <div>
+                <div class="header-title">FedShield</div>
+                <div class="header-subtitle">Federated Learning Security, Privacy & Robustness Platform</div>
+            </div>
         </div>
-        <div class="nav-status">
-            <span class="pill"><span class="pill-dot"></span> Backend Server Online</span>
-            <span style="font-size: 0.8rem; color: var(--text-muted);" id="device-pill">CPU Engine</span>
-            <a href="/api/export_csv" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">
-                <i class="fa-solid fa-file-arrow-down"></i> Export CSV
-            </a>
+        <div class="header-actions">
+            <span class="status-badge"><span class="status-dot"></span> Server Active (Port 8080)</span>
+            <a href="/api/export_csv" class="btn-download">Download CSV</a>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- Executive KPI Cards -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-header">
-                    <span>Target Dataset</span>
-                    <div class="kpi-icon"><i class="fa-solid fa-database"></i></div>
-                </div>
-                <div class="kpi-value">CIFAR-10</div>
-                <div class="kpi-sub"><i class="fa-solid fa-layer-group"></i> 10 Classes | 60k Samples</div>
+        <!-- Top Stat Cards -->
+        <div class="kpi-row">
+            <div class="kpi-box">
+                <div class="kpi-label">Dataset</div>
+                <div class="kpi-number">CIFAR-10</div>
+                <div class="kpi-hint">10 Classes | 60,000 Images</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-header">
-                    <span>Model Architecture</span>
-                    <div class="kpi-icon"><i class="fa-solid fa-network-wired"></i></div>
-                </div>
-                <div class="kpi-value">3-Stage CNN</div>
-                <div class="kpi-sub"><i class="fa-solid fa-microchip"></i> 283,562 Parameters</div>
+            <div class="kpi-box">
+                <div class="kpi-label">Model Architecture</div>
+                <div class="kpi-number">3-Stage CNN</div>
+                <div class="kpi-hint">283,562 Trainable Parameters</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-header">
-                    <span>Network Transmission</span>
-                    <div class="kpi-icon"><i class="fa-solid fa-satellite-dish"></i></div>
-                </div>
-                <div class="kpi-value">1.09 MB</div>
-                <div class="kpi-sub"><i class="fa-solid fa-arrows-up-down"></i> Uplink/Downlink Payload</div>
+            <div class="kpi-box">
+                <div class="kpi-label">Payload Transmission</div>
+                <div class="kpi-number">1.09 MB</div>
+                <div class="kpi-hint">Per Client Synchronization</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-header">
-                    <span>Completed Experiments</span>
-                    <div class="kpi-icon"><i class="fa-solid fa-flask"></i></div>
-                </div>
-                <div class="kpi-value" id="kpi-runs">--</div>
-                <div class="kpi-sub"><i class="fa-solid fa-check-double text-success"></i> Recorded in CSV</div>
+            <div class="kpi-box">
+                <div class="kpi-label">Benchmark Runs</div>
+                <div class="kpi-number" id="stat-runs">--</div>
+                <div class="kpi-hint">Recorded in experiments_summary.csv</div>
             </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="setTab('overview', this)"><i class="fa-solid fa-sitemap"></i> System Architecture</button>
-            <button class="tab-btn" onclick="setTab('benchmarks', this)"><i class="fa-solid fa-table-list"></i> Benchmark Matrix</button>
-            <button class="tab-btn" onclick="setTab('convergence', this)"><i class="fa-solid fa-chart-line"></i> Convergence Trajectories</button>
-            <button class="tab-btn" onclick="setTab('byzantine', this)"><i class="fa-solid fa-shield-virus"></i> Byzantine Attacks & Defenses</button>
-            <button class="tab-btn" onclick="setTab('heterogeneity', this)"><i class="fa-solid fa-chart-simple"></i> Non-IID Dirichlet Simulator</button>
-            <button class="tab-btn" onclick="setTab('privacy', this)"><i class="fa-solid fa-user-lock"></i> Differential Privacy</button>
-            <button class="tab-btn" onclick="setTab('live', this)"><i class="fa-solid fa-terminal"></i> Live Experiment Lab</button>
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="switchTab('benchmarks', this)">📋 Experiment Results</button>
+            <button class="tab-button" onclick="switchTab('convergence', this)">📈 Performance Curves</button>
+            <button class="tab-button" onclick="switchTab('byzantine', this)">🛡️ Byzantine Attack & Defense</button>
+            <button class="tab-button" onclick="switchTab('heterogeneity', this)">📊 Non-IID Data Partitioner</button>
+            <button class="tab-button" onclick="switchTab('run', this)">⚡ Run Experiment</button>
         </div>
 
-        <!-- TAB 1: SYSTEM ARCHITECTURE -->
-        <div id="tab-overview" class="tab-pane active">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Interactive Federated Learning Architecture</span>
-                    <span style="font-size:0.8rem; color:var(--text-muted);">Click on any component node to explore its internals</span>
-                </div>
-                <div class="arch-nodes">
-                    <div class="arch-node active" onclick="showArchDetail('server', this)">
-                        <i class="fa-solid fa-server"></i>
-                        <h4>Central Server</h4>
-                        <p>Orchestrator & Global Evaluator</p>
-                    </div>
-                    <div class="arch-node" onclick="showArchDetail('benign', this)">
-                        <i class="fa-solid fa-laptop-code"></i>
-                        <h4>Benign Clients</h4>
-                        <p>Local SGD / FedProx (Non-IID)</p>
-                    </div>
-                    <div class="arch-node" onclick="showArchDetail('malicious', this)">
-                        <i class="fa-solid fa-bug text-danger"></i>
-                        <h4>Byzantine Attackers</h4>
-                        <p>Sign-Flipping & Scaling</p>
-                    </div>
-                    <div class="arch-node" onclick="showArchDetail('aggregators', this)">
-                        <i class="fa-solid fa-filter-circle-dollar"></i>
-                        <h4>Robust Aggregation</h4>
-                        <p>Coordinate Median & Trimmed Mean</p>
-                    </div>
-                    <div class="arch-node" onclick="showArchDetail('privacy', this)">
-                        <i class="fa-solid fa-lock text-purple"></i>
-                        <h4>DP Privacy Engine</h4>
-                        <p>Gaussian Mechanism & Moments</p>
-                    </div>
+        <!-- TAB 1: Experiment Results -->
+        <div id="tab-benchmarks" class="tab-content active">
+            <div class="card">
+                <div class="card-title">Empirical Benchmark Summary</div>
+                <div class="card-subtitle">Real-time records from experimental runs across centralized baseline, data heterogeneity, Byzantine attacks, and Differential Privacy.</div>
+
+                <div class="table-filter-bar">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search by experiment name, algorithm, or defense..." onkeyup="filterBenchmarks()">
+                    <button class="btn-refresh" onclick="loadBenchmarks()">Refresh Data</button>
                 </div>
 
-                <div class="arch-detail-box" id="arch-detail-content">
-                    <h3 style="color:var(--primary); margin-bottom:8px;"><i class="fa-solid fa-server"></i> Central Orchestration Server</h3>
-                    <p>The FedShield Server coordinates global communication rounds ($T$). In each round, it samples a subset of clients with participation rate $q$, broadcasts the current global parameters $W_t$, collects parameter updates ($\Delta w_k$), runs robust aggregation, and evaluates global test metrics (Loss, Accuracy, Precision, Recall, Macro F1, and Confusion Matrix).</p>
-                    <div style="margin-top:12px; font-family:Consolas, monospace; color:#38bdf8;">Downlink / Uplink Communication = 2 × K × ModelSize (1.09 MB)</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: BENCHMARK MATRIX -->
-        <div id="tab-benchmarks" class="tab-pane">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Empirical Benchmark Results Matrix</span>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn btn-outline" onclick="loadBenchmarks()"><i class="fa-solid fa-rotate"></i> Refresh</button>
-                    </div>
-                </div>
-                <div class="table-toolbar">
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i>
-                        <input type="text" id="filter-input" placeholder="Filter by algorithm, aggregation, or ID..." onkeyup="filterTable()">
-                    </div>
-                    <span style="font-size:0.8rem; color:var(--text-muted);" id="row-count-label">Showing all records</span>
-                </div>
-                <div class="table-responsive">
-                    <table id="benchmark-table">
+                <div class="table-wrapper">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Experiment ID</th>
                                 <th>Algorithm</th>
                                 <th>Data Split</th>
-                                <th>Dirichlet α</th>
-                                <th>Malicious %</th>
-                                <th>Aggregation</th>
-                                <th>Privacy (DP)</th>
+                                <th>Alpha (α)</th>
+                                <th>Malicious Clients</th>
+                                <th>Aggregation Defense</th>
+                                <th>Differential Privacy</th>
                                 <th>Test Accuracy</th>
                                 <th>Test Loss</th>
-                                <th>Duration</th>
+                                <th>Time</th>
                             </tr>
                         </thead>
-                        <tbody id="benchmark-tbody">
-                            <tr><td colspan="10" style="text-align:center; padding:24px; color:var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading experiment logs...</td></tr>
+                        <tbody id="table-body">
+                            <tr><td colspan="10" style="text-align:center; padding:24px; color:var(--text-muted);">Loading benchmark logs...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: CONVERGENCE TRAJECTORIES -->
-        <div id="tab-convergence" class="tab-pane">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Round-by-Round Convergence Trajectories</span>
-                    <span style="font-size:0.8rem; color:var(--text-muted);">Interactive multi-experiment comparison</span>
-                </div>
-                <div class="grid-split">
+        <!-- TAB 2: Performance Curves -->
+        <div id="tab-convergence" class="tab-content">
+            <div class="card">
+                <div class="card-title">Training Convergence Trajectories</div>
+                <div class="card-subtitle">Round-by-round global test accuracy and loss comparison across experimental setups.</div>
+
+                <div class="chart-grid">
                     <div>
-                        <h4 style="font-size:0.95rem; margin-bottom:6px; color:var(--text-main);">Global Test Accuracy (%) vs Communication Rounds</h4>
-                        <div class="chart-wrapper">
-                            <canvas id="chart-accuracy"></canvas>
+                        <h4 style="font-size:15px; margin-bottom:8px;">Test Accuracy (%) vs Communication Rounds</h4>
+                        <div class="chart-box">
+                            <canvas id="accuracyChart"></canvas>
                         </div>
                     </div>
                     <div>
-                        <h4 style="font-size:0.95rem; margin-bottom:6px; color:var(--text-main);">Global Test Loss vs Communication Rounds</h4>
-                        <div class="chart-wrapper">
-                            <canvas id="chart-loss"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: BYZANTINE ATTACKS & DEFENSES -->
-        <div id="tab-byzantine" class="tab-pane">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Byzantine Adversarial Poisoning & Defense Lab</span>
-                </div>
-                <p class="section-desc">
-                    In distributed systems, malicious edge nodes can transmit poisoned parameter updates to steer global convergence away from the optimal point.
-                    Below is empirical verification of how <strong>Coordinate Median</strong> and <strong>Trimmed Mean</strong> filter out adversarial updates and restore classification performance.
-                </p>
-                <div class="chart-wrapper" style="height:380px;">
-                    <canvas id="chart-byzantine"></canvas>
-                </div>
-
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-top:28px;">
-                    <div style="background:#0b1120; padding:18px; border-radius:var(--radius-md); border:1px solid var(--border);">
-                        <h4 style="color:#f87171; margin-bottom:6px;"><i class="fa-solid fa-skull-crossbones"></i> Sign-Flipping Attack</h4>
-                        <p style="font-size:0.85rem; color:var(--text-secondary);">Inverts the parameter update: $\Delta w_{adv} = -s \cdot (w_k - w_{global})$. Naive FedAvg averages this opposite direction, dropping accuracy to 11.4%.</p>
-                    </div>
-                    <div style="background:#0b1120; padding:18px; border-radius:var(--radius-md); border:1px solid var(--border);">
-                        <h4 style="color:#60a5fa; margin-bottom:6px;"><i class="fa-solid fa-chart-line"></i> Coordinate Median Defense</h4>
-                        <p style="font-size:0.85rem; color:var(--text-secondary);">Takes the median value coordinate-by-coordinate across all clients. Extreme outliers and inverted updates cannot shift the median, recovering accuracy to 28.4%.</p>
-                    </div>
-                    <div style="background:#0b1120; padding:18px; border-radius:var(--radius-md); border:1px solid var(--border);">
-                        <h4 style="color:#34d399; margin-bottom:6px;"><i class="fa-solid fa-scissors"></i> Trimmed Mean Defense</h4>
-                        <p style="font-size:0.85rem; color:var(--text-secondary);">Sorts coordinates across clients and trims the top and bottom $\beta$ fraction (e.g. 20%) before computing the mean. Effectively discards all poisoned coordinates.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 5: NON-IID DIRICHLET SIMULATOR -->
-        <div id="tab-heterogeneity" class="tab-pane">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Non-IID Statistical Heterogeneity Simulator</span>
-                </div>
-                <p class="section-desc">
-                    Client datasets in real-world federated learning are Non-IID. FedShield partitions CIFAR-10 classes using Dirichlet distributions: $p_{c} \sim \text{Dir}(\alpha)$. Lower $\alpha$ values create severe class imbalances where clients hold only 1-2 dominant classes.
-                </p>
-
-                <div style="display:flex; align-items:center; gap:20px; background:#0b1120; padding:16px 20px; border-radius:var(--radius-md); border:1px solid var(--border); margin-bottom:20px;">
-                    <label style="min-width:190px; font-weight:600;">Dirichlet Alpha ($\alpha$): <strong id="slider-alpha-txt" style="color:var(--primary); font-size:1.15rem;">0.5</strong></label>
-                    <input type="range" id="dirichlet-slider" min="0.1" max="5.0" step="0.1" value="0.5" style="flex:1;" oninput="onAlphaChange(this.value)">
-                    <span style="font-size:0.8rem; color:var(--text-muted); min-width:140px;" id="alpha-status-text">Moderate Non-IID</span>
-                </div>
-
-                <div class="grid-split">
-                    <div>
-                        <h4 style="font-size:0.95rem; margin-bottom:8px; color:var(--text-main);">Client Class Allocation (Stacked Bar Chart)</h4>
-                        <div class="chart-wrapper">
-                            <canvas id="chart-dirichlet"></canvas>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 style="font-size:0.95rem; margin-bottom:8px; color:var(--text-main);">Class Sample Intensity Heatmap</h4>
-                        <div id="heatmap-container" style="background:#0b1120; padding:16px; border-radius:var(--radius-md); border:1px solid var(--border); height:372px; overflow:auto;">
-                            <div style="text-align:center; padding:30px; color:var(--text-muted);">Generating class heatmap...</div>
+                        <h4 style="font-size:15px; margin-bottom:8px;">Global Test Loss vs Communication Rounds</h4>
+                        <div class="chart-box">
+                            <canvas id="lossChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 6: DIFFERENTIAL PRIVACY -->
-        <div id="tab-privacy" class="tab-pane">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Differential Privacy (DP) & Privacy-Utility Tradeoff</span>
+        <!-- TAB 3: Byzantine Attack & Defense -->
+        <div id="tab-byzantine" class="tab-content">
+            <div class="card">
+                <div class="card-title">Byzantine Attack Resistance</div>
+                <div class="card-subtitle">Comparing model accuracy under a 20% Byzantine Sign-Flipping attack. Notice how Coordinate Median and Trimmed Mean neutralize the attack.</div>
+
+                <div class="chart-box" style="height:340px;">
+                    <canvas id="byzantineChart"></canvas>
                 </div>
-                <p class="section-desc">
-                    To prevent model inversion and training data extraction attacks, FedShield enforces $(\epsilon, \delta)$-Differential Privacy via the <strong>Subsampled Gaussian Mechanism</strong> with $L_2$ update clipping and analytical Moments Accountant tracking.
-                </p>
-                <div class="grid-split">
-                    <div>
-                        <h4 style="font-size:0.95rem; margin-bottom:6px; color:var(--text-main);">Accumulated Privacy Budget ($\epsilon$) vs Communication Rounds</h4>
-                        <div class="chart-wrapper">
-                            <canvas id="chart-dp"></canvas>
-                        </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4 style="color:#f87171;">⚠️ Sign-Flipping Attack</h4>
+                        <p>Malicious clients invert their weight updates ($-\text{scaling} \cdot \Delta w$). Standard FedAvg blindly averages these, causing test accuracy to plummet to <strong>11.4%</strong>.</p>
                     </div>
-                    <div>
-                        <h4 style="font-size:0.95rem; margin-bottom:12px; color:var(--text-main);">Empirical Privacy-Utility Guarantees ($\delta = 10^{-5}$)</h4>
-                        <div style="display:flex; flex-direction:column; gap:14px;">
-                            <div style="background:#0b1120; border-left:4px solid var(--success); padding:16px; border-radius:8px;">
-                                <div style="display:flex; justify-content:space-between; font-weight:700;">
-                                    <span style="color:#34d399;">Relaxed Privacy ($\sigma = 0.2$)</span>
-                                    <span>Accuracy: ~28.5%</span>
-                                </div>
-                                <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">$\epsilon \approx 8.4$ | Minimal accuracy drop, suitable for low-sensitivity distributed benchmarks.</div>
-                            </div>
-                            <div style="background:#0b1120; border-left:4px solid var(--primary); padding:16px; border-radius:8px;">
-                                <div style="display:flex; justify-content:space-between; font-weight:700;">
-                                    <span style="color:#60a5fa;">Balanced Privacy ($\sigma = 0.5$)</span>
-                                    <span>Accuracy: ~20.0%</span>
-                                </div>
-                                <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">$\epsilon \approx 3.3$ | Enterprise standard trade-off; protects against membership inference attacks.</div>
-                            </div>
-                            <div style="background:#0b1120; border-left:4px solid var(--purple); padding:16px; border-radius:8px;">
-                                <div style="display:flex; justify-content:space-between; font-weight:700;">
-                                    <span style="color:#c084fc;">Strict Privacy ($\sigma = 1.0$)</span>
-                                    <span>Accuracy: ~10.0%</span>
-                                </div>
-                                <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">$\epsilon \approx 1.6$ | Strongest mathematical privacy guarantee; masks underlying class signals.</div>
-                            </div>
-                        </div>
+                    <div class="info-card">
+                        <h4 style="color:#60a5fa;">🛡️ Coordinate Median</h4>
+                        <p>Calculates the coordinate-wise median across clients. Outlier inverted updates cannot shift the median coordinate, restoring test accuracy to <strong>28.4%</strong>.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4 style="color:#34d399;">🛡️ Trimmed Mean</h4>
+                        <p>Discards the top and bottom $\beta$ fraction (e.g. 20%) of updates per coordinate before averaging, eliminating poisoned updates and restoring accuracy to <strong>28.4%</strong>.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 7: LIVE EXPERIMENT RUNNER -->
-        <div id="tab-live" class="tab-pane">
-            <div class="section-card">
-                <div class="section-title">
-                    <span>Live Interactive Experiment Launcher</span>
-                    <span style="font-size:0.8rem; color:var(--text-muted);">Execute quick-mode federated training runs in real time</span>
+        <!-- TAB 4: Non-IID Data Partitioner -->
+        <div id="tab-heterogeneity" class="tab-content">
+            <div class="card">
+                <div class="card-title">Non-IID Statistical Heterogeneity (Dirichlet α)</div>
+                <div class="card-subtitle">Adjust the Dirichlet parameter α to simulate varying degrees of class imbalance across federated edge clients.</div>
+
+                <div style="display:flex; align-items:center; gap:16px; background:var(--bg-input); padding:16px 20px; border-radius:8px; border:1px solid var(--border); margin-bottom:20px;">
+                    <label style="min-width:180px; font-weight:600; font-size:14px;">Dirichlet Alpha: <strong id="alpha-display" style="color:var(--primary); font-size:16px;">0.5</strong></label>
+                    <input type="range" id="alpha-slider" min="0.1" max="5.0" step="0.1" value="0.5" style="flex:1;" oninput="updateAlpha(this.value)">
+                    <span id="alpha-label" style="font-size:13px; color:var(--text-muted); min-width:130px;">Moderate Non-IID</span>
                 </div>
-                <form id="fl-run-form" onsubmit="executeLiveRun(event)">
+
+                <div class="chart-box" style="height:360px;">
+                    <canvas id="dirichletChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: Run Live Experiment -->
+        <div id="tab-run" class="tab-content">
+            <div class="card">
+                <div class="card-title">Launch Live Training Experiment</div>
+                <div class="card-subtitle">Run a fast 2-round federated training experiment and view results immediately on the dashboard.</div>
+
+                <div style="margin-bottom:18px;">
+                    <span style="font-size:13px; color:var(--text-muted); font-weight:600;">QUICK PRESETS:</span>
+                    <div class="preset-buttons" style="margin-top:8px;">
+                        <button type="button" class="preset-btn" onclick="applyPreset('fedavg', 'iid', 0.5, 0.0, 'fedavg', false)">Standard FedAvg (IID)</button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('fedprox', 'non_iid_dirichlet', 0.1, 0.0, 'fedavg', false)">FedProx (Extreme Non-IID α=0.1)</button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('fedavg', 'iid', 0.5, 0.2, 'coordinate_median', false)">Byzantine Attack + Median Defense</button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('fedavg', 'iid', 0.5, 0.0, 'fedavg', true)">Differential Privacy (DP-FedAvg)</button>
+                    </div>
+                </div>
+
+                <form id="run-form" onsubmit="handleRun(event)">
                     <div class="form-grid">
                         <div class="form-field">
-                            <label>FL Algorithm</label>
-                            <select id="fl-algo">
-                                <option value="fedavg">FedAvg (Standard SGD)</option>
-                                <option value="fedprox">FedProx (Proximal Regularization)</option>
+                            <label>Algorithm</label>
+                            <select id="run-algo">
+                                <option value="fedavg">FedAvg (Standard)</option>
+                                <option value="fedprox">FedProx (Proximal Regularizer)</option>
                             </select>
                         </div>
                         <div class="form-field">
                             <label>Data Partitioning</label>
-                            <select id="fl-partition">
-                                <option value="iid">IID Uniform</option>
-                                <option value="non_iid_dirichlet">Non-IID Dirichlet</option>
+                            <select id="run-partition">
+                                <option value="iid">IID (Uniform)</option>
+                                <option value="non_iid_dirichlet">Non-IID (Dirichlet)</option>
                             </select>
                         </div>
                         <div class="form-field">
                             <label>Dirichlet Alpha (Heterogeneity)</label>
-                            <input type="number" id="fl-alpha" value="0.5" step="0.1" min="0.05" max="5.0">
+                            <input type="number" id="run-alpha" value="0.5" step="0.1" min="0.05" max="5.0">
                         </div>
                         <div class="form-field">
                             <label>Client Count</label>
-                            <select id="fl-clients">
+                            <select id="run-clients">
                                 <option value="5">5 Clients</option>
                                 <option value="10">10 Clients</option>
                             </select>
                         </div>
                         <div class="form-field">
-                            <label>Byzantine Malicious Fraction</label>
-                            <select id="fl-malicious">
+                            <label>Byzantine Malicious Clients</label>
+                            <select id="run-malicious">
                                 <option value="0.0">0% (All Benign)</option>
                                 <option value="0.2">20% Malicious Clients</option>
-                                <option value="0.4">40% Malicious Clients</option>
                             </select>
                         </div>
                         <div class="form-field">
-                            <label>Byzantine Attack Strategy</label>
-                            <select id="fl-attack">
-                                <option value="sign_flipping">Sign-Flipping Attack (-2.0 × delta)</option>
-                                <option value="update_scaling">Update Scaling Attack (+5.0 × delta)</option>
+                            <label>Attack Type</label>
+                            <select id="run-attack">
+                                <option value="sign_flipping">Sign-Flipping</option>
+                                <option value="update_scaling">Update-Scaling</option>
                             </select>
                         </div>
                         <div class="form-field">
-                            <label>Server Aggregation Defense</label>
-                            <select id="fl-aggregation">
-                                <option value="fedavg">Standard FedAvg (Vulnerable)</option>
+                            <label>Server Aggregation</label>
+                            <select id="run-aggregation">
+                                <option value="fedavg">FedAvg (Standard)</option>
                                 <option value="coordinate_median">Coordinate Median (Robust)</option>
-                                <option value="trimmed_mean">Trimmed Mean (Robust, β=0.2)</option>
+                                <option value="trimmed_mean">Trimmed Mean (Robust)</option>
                             </select>
                         </div>
                         <div class="form-field">
-                            <label>Differential Privacy</label>
-                            <select id="fl-dp">
+                            <label>Differential Privacy (DP)</label>
+                            <select id="run-dp">
                                 <option value="false">Disabled</option>
-                                <option value="true">Enabled (Gaussian Noise σ = 0.5)</option>
+                                <option value="true">Enabled (Noise σ = 0.5)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div style="display:flex; align-items:center; gap:16px;">
-                        <button type="submit" class="btn" id="fl-submit-btn">
-                            <i class="fa-solid fa-play"></i> Launch Federated Training
-                        </button>
-                        <span id="fl-status-indicator" style="font-size:0.9rem; font-weight:600;"></span>
-                    </div>
+                    <button type="submit" class="btn-launch" id="btn-submit">Start Training Run</button>
+                    <div id="run-alert" class="alert-box"></div>
                 </form>
-
-                <div style="margin-top:24px;">
-                    <h4 style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">Live Execution Logs & Status</h4>
-                    <div class="terminal-console" id="fl-terminal">
-                        [FedShield Engine Ready] Select training parameters above and click 'Launch Federated Training'...
-                    </div>
-                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        // Global Chart References
-        let chartAcc = null;
-        let chartLoss = null;
-        let chartByzantine = null;
-        let chartDirichlet = null;
-        let chartDP = null;
-        let cachedBenchmarks = [];
+        let chartAccInstance = null;
+        let chartLossInstance = null;
+        let chartByzantineInstance = null;
+        let chartDirichletInstance = null;
+        let allBenchmarks = [];
 
-        const ARCH_INFO = {
-            server: {
-                title: '<i class="fa-solid fa-server"></i> Central Orchestration Server',
-                text: 'Coordinates communication rounds ($T$). In each round, samples $K$ participating clients, broadcasts global weights $W_t$, receives model updates $\\Delta w_k$, computes robust aggregation, and tests accuracy across CIFAR-10 test set.',
-                formula: 'Downlink / Uplink Communication = 2 × K × ModelSize (1.09 MB)'
-            },
-            benign: {
-                title: '<i class="fa-solid fa-laptop-code"></i> Benign Federated Clients',
-                text: 'Participating devices holding private local subsets partitioned via IID or Dirichlet distributions. Optimizes local weights using Adam with CrossEntropyLoss. Under FedProx, adds proximal regularization: $\\frac{\\mu}{2} \\|w - W_t\\|^2$ to prevent client drift.',
-                formula: 'Local objective: \\min_w F_k(w) + \\frac{\\mu}{2}\\|w - W_t\\|^2'
-            },
-            malicious: {
-                title: '<i class="fa-solid fa-bug text-danger"></i> Byzantine Adversarial Attackers',
-                text: 'Compromised devices injecting poisoned updates. Under Sign-Flipping, updates are reversed: $\\Delta w_{adv} = -s \\cdot \\Delta w$. Under Update-Scaling, updates are amplified by scaling factors to dominate aggregation.',
-                formula: 'Poisoned Update: w_{adv} = W_t - s \\cdot (w_{local} - W_t)'
-            },
-            aggregators: {
-                title: '<i class="fa-solid fa-filter-circle-dollar"></i> Byzantine-Robust Server Aggregators',
-                text: 'Replaces arithmetic FedAvg with outlier-resistant operators. Coordinate Median selects the median value for every weight tensor dimension. Trimmed Mean removes the lowest and highest $\\beta$ fraction before averaging.',
-                formula: 'w^{median}_j = \\text{median}(\\{w_{k, j}\\}_{k=1}^K)'
-            },
-            privacy: {
-                title: '<i class="fa-solid fa-lock text-purple"></i> Differential Privacy Engine',
-                text: 'Enforces $(\\epsilon, \\delta)$-DP on model updates. Clips individual gradient norms to threshold $C$ ($\\Delta w / \\max(1, \\|\\Delta w\\|/C)$), and injects calibrated Gaussian noise: $\\sigma = (\\sigma_{mult} \\cdot C) / \\sqrt{K}$. Formally tracked via Moments Accountant.',
-                formula: '\\epsilon \\approx \\frac{q \\sqrt{2 T \\ln(1/\\delta)}}{\\sigma_{mult}}'
-            }
-        };
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
 
-        function setTab(tabName, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('tab-' + tabName).classList.add('active');
-
-            if (tabName === 'convergence') renderConvergence();
-            if (tabName === 'byzantine') renderByzantine();
-            if (tabName === 'heterogeneity') fetchDirichletSimulation(parseFloat(document.getElementById('dirichlet-slider').value));
-            if (tabName === 'privacy') renderDPChart();
-        }
-
-        function showArchDetail(key, node) {
-            document.querySelectorAll('.arch-node').forEach(n => n.classList.remove('active'));
-            node.classList.add('active');
-            const info = ARCH_INFO[key];
-            document.getElementById('arch-detail-content').innerHTML = `
-                <h3 style="color:var(--primary); margin-bottom:8px;">${info.title}</h3>
-                <p>${info.text}</p>
-                <div style="margin-top:12px; font-family:Consolas, monospace; color:#38bdf8;">${info.formula}</div>
-            `;
-        }
-
-        async function fetchSystemInfo() {
-            try {
-                const res = await fetch('/api/system_info');
-                const data = await res.json();
-                if (data.device) {
-                    document.getElementById('device-pill').innerText = `${data.device.toUpperCase()} Engine | PyTorch ${data.pytorch_version}`;
-                }
-            } catch (e) {
-                console.warn(e);
-            }
+            if (tabId === 'convergence') renderConvergenceCharts();
+            if (tabId === 'byzantine') renderByzantineChart();
+            if (tabId === 'heterogeneity') fetchDirichlet(parseFloat(document.getElementById('alpha-slider').value));
         }
 
         async function loadBenchmarks() {
             try {
                 const res = await fetch('/api/summary');
                 const data = await res.json();
-                cachedBenchmarks = data;
-                document.getElementById('kpi-runs').innerText = data.length;
-                renderBenchmarkTable(data);
-            } catch (err) {
-                console.error('Error fetching benchmarks:', err);
+                allBenchmarks = data;
+                document.getElementById('stat-runs').innerText = data.length;
+                renderTable(data);
+            } catch (e) {
+                console.error('Error fetching benchmarks:', e);
             }
         }
 
-        function renderBenchmarkTable(data) {
-            const tbody = document.getElementById('benchmark-tbody');
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
             if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:var(--text-muted);">No records found.</td></tr>';
@@ -770,87 +692,86 @@
 
             data.slice().reverse().forEach(row => {
                 const tr = document.createElement('tr');
-                const isMal = parseFloat(row.malicious_fraction || 0) > 0;
-                const isDef = isMal && row.aggregation_method !== 'fedavg';
-                const isVuln = isMal && row.aggregation_method === 'fedavg';
+                const isMalicious = parseFloat(row.malicious_fraction || 0) > 0;
+                const isDefended = isMalicious && row.aggregation_method !== 'fedavg';
+                const isAttacked = isMalicious && row.aggregation_method === 'fedavg';
 
-                let aggTag = `<span class="tag tag-blue">${row.aggregation_method}</span>`;
-                if (isDef) aggTag = `<span class="tag tag-green">${row.aggregation_method} (Defended)</span>`;
-                if (isVuln) aggTag = `<span class="tag tag-red">${row.aggregation_method} (Under Attack)</span>`;
+                let aggHtml = `<span class="badge badge-blue">${row.aggregation_method}</span>`;
+                if (isDefended) aggHtml = `<span class="badge badge-green">${row.aggregation_method} (Defended)</span>`;
+                if (isAttacked) aggHtml = `<span class="badge badge-red">${row.aggregation_method} (Under Attack)</span>`;
 
                 tr.innerHTML = `
                     <td style="font-weight:700; color:#fff;">${row.experiment_id}</td>
-                    <td><span class="tag tag-purple">${(row.algorithm || 'fedavg').toUpperCase()}</span></td>
+                    <td><span class="badge badge-purple">${(row.algorithm || 'fedavg').toUpperCase()}</span></td>
                     <td>${row.partition_type || 'N/A'}</td>
                     <td>${row.dirichlet_alpha || 'N/A'}</td>
                     <td>${(parseFloat(row.malicious_fraction || 0) * 100).toFixed(0)}%</td>
-                    <td>${aggTag}</td>
-                    <td>${row.dp_enabled === 'True' || row.dp_enabled === true ? `<span class="tag tag-green">DP (σ=${row.noise_multiplier})</span>` : '<span style="color:var(--text-muted);">Disabled</span>'}</td>
-                    <td style="font-weight:700; color:#38bdf8;">${row.final_accuracy}%</td>
+                    <td>${aggHtml}</td>
+                    <td>${row.dp_enabled === 'True' || row.dp_enabled === true ? `<span class="badge badge-green">DP (σ=${row.noise_multiplier})</span>` : '<span style="color:var(--text-muted);">Disabled</span>'}</td>
+                    <td><span class="accuracy-pill">${row.final_accuracy}%</span></td>
                     <td>${row.final_loss}</td>
                     <td style="color:var(--text-muted);">${row.training_time_s}s</td>
                 `;
                 tbody.appendChild(tr);
             });
-            document.getElementById('row-count-label').innerText = `Showing ${data.length} recorded benchmark runs`;
         }
 
-        function filterTable() {
-            const query = document.getElementById('filter-input').value.toLowerCase();
-            const filtered = cachedBenchmarks.filter(r => 
+        function filterBenchmarks() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allBenchmarks.filter(r => 
                 (r.experiment_id || '').toLowerCase().includes(query) ||
                 (r.algorithm || '').toLowerCase().includes(query) ||
                 (r.aggregation_method || '').toLowerCase().includes(query)
             );
-            renderBenchmarkTable(filtered);
+            renderTable(filtered);
         }
 
-        function renderConvergence() {
-            const ctxAcc = document.getElementById('chart-accuracy').getContext('2d');
-            const ctxLoss = document.getElementById('chart-loss').getContext('2d');
-            if (chartAcc) chartAcc.destroy();
-            if (chartLoss) chartLoss.destroy();
+        function renderConvergenceCharts() {
+            const ctxAcc = document.getElementById('accuracyChart').getContext('2d');
+            const ctxLoss = document.getElementById('lossChart').getContext('2d');
+            if (chartAccInstance) chartAccInstance.destroy();
+            if (chartLossInstance) chartLossInstance.destroy();
 
             const rounds = ['Round 1', 'Round 2', 'Round 3'];
-            chartAcc = new Chart(ctxAcc, {
+            chartAccInstance = new Chart(ctxAcc, {
                 type: 'line',
                 data: {
                     labels: rounds,
                     datasets: [
-                        { label: 'FedAvg (IID)', data: [21.0, 30.2, 29.8], borderColor: '#3b82f6', tension: 0.25, borderWidth: 2 },
-                        { label: 'FedAvg (Non-IID α=0.5)', data: [17.0, 22.4, 22.6], borderColor: '#8b5cf6', tension: 0.25, borderWidth: 2 },
-                        { label: 'FedProx (Non-IID α=0.1)', data: [8.2, 20.4, 20.2], borderColor: '#10b981', tension: 0.25, borderWidth: 2 },
-                        { label: 'Attacked FedAvg (20% Malicious)', data: [10.2, 11.4, 11.4], borderColor: '#ef4444', borderDash: [4, 4], tension: 0.25, borderWidth: 2 },
-                        { label: 'Coordinate Median Defense', data: [22.4, 26.8, 28.4], borderColor: '#06b6d4', tension: 0.25, borderWidth: 2 },
-                        { label: 'Trimmed Mean Defense', data: [20.4, 26.4, 28.4], borderColor: '#34d399', tension: 0.25, borderWidth: 2 }
+                        { label: 'FedAvg (IID)', data: [21.0, 30.2, 29.8], borderColor: '#3b82f6', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'FedAvg (Non-IID α=0.5)', data: [17.0, 22.4, 22.6], borderColor: '#8b5cf6', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'FedProx (Non-IID α=0.1)', data: [8.2, 20.4, 20.2], borderColor: '#10b981', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'Vulnerable FedAvg (20% Attack)', data: [10.2, 11.4, 11.4], borderColor: '#ef4444', borderDash: [4, 4], tension: 0.25, borderWidth: 2.5 },
+                        { label: 'Coordinate Median Defense', data: [22.4, 26.8, 28.4], borderColor: '#06b6d4', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'Trimmed Mean Defense', data: [20.4, 26.4, 28.4], borderColor: '#34d399', tension: 0.25, borderWidth: 2.5 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } },
                     scales: {
-                        y: { title: { display: true, text: 'Test Accuracy (%)', color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                        y: { title: { display: true, text: 'Accuracy (%)', color: '#94a3b8' }, grid: { color: '#1e293b' } },
                         x: { grid: { color: '#1e293b' } }
                     }
                 }
             });
 
-            chartLoss = new Chart(ctxLoss, {
+            chartLossInstance = new Chart(ctxLoss, {
                 type: 'line',
                 data: {
                     labels: rounds,
                     datasets: [
-                        { label: 'FedAvg (IID)', data: [2.29, 2.04, 1.94], borderColor: '#3b82f6', tension: 0.25, borderWidth: 2 },
-                        { label: 'FedAvg (Non-IID α=0.5)', data: [2.29, 2.13, 2.04], borderColor: '#8b5cf6', tension: 0.25, borderWidth: 2 },
-                        { label: 'Coordinate Median Defense', data: [2.28, 2.07, 1.99], borderColor: '#06b6d4', tension: 0.25, borderWidth: 2 },
-                        { label: 'Trimmed Mean Defense', data: [2.28, 2.09, 2.01], borderColor: '#34d399', tension: 0.25, borderWidth: 2 }
+                        { label: 'FedAvg (IID)', data: [2.29, 2.04, 1.94], borderColor: '#3b82f6', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'FedAvg (Non-IID α=0.5)', data: [2.29, 2.13, 2.04], borderColor: '#8b5cf6', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'Coordinate Median Defense', data: [2.28, 2.07, 1.99], borderColor: '#06b6d4', tension: 0.25, borderWidth: 2.5 },
+                        { label: 'Trimmed Mean Defense', data: [2.28, 2.09, 2.01], borderColor: '#34d399', tension: 0.25, borderWidth: 2.5 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } },
                     scales: {
                         y: { title: { display: true, text: 'Loss', color: '#94a3b8' }, grid: { color: '#1e293b' } },
                         x: { grid: { color: '#1e293b' } }
@@ -859,64 +780,63 @@
             });
         }
 
-        function renderByzantine() {
-            const ctx = document.getElementById('chart-byzantine').getContext('2d');
-            if (chartByzantine) chartByzantine.destroy();
+        function renderByzantineChart() {
+            const ctx = document.getElementById('byzantineChart').getContext('2d');
+            if (chartByzantineInstance) chartByzantineInstance.destroy();
 
-            chartByzantine = new Chart(ctx, {
+            chartByzantineInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Standard FedAvg (Vulnerable)', 'Coordinate Median (Defense)', 'Trimmed Mean (Defense)'],
                     datasets: [
-                        { label: 'Benign Baseline (0% Attack)', data: [29.8, 29.2, 29.0], backgroundColor: '#3b82f6' },
-                        { label: 'Under 20% Sign-Flipping Attack', data: [11.4, 28.4, 28.4], backgroundColor: '#ef4444' }
+                        { label: 'Benign Baseline (0% Attack)', data: [29.8, 29.2, 29.0], backgroundColor: '#3b82f6', borderRadius: 6 },
+                        { label: 'Under 20% Sign-Flipping Attack', data: [11.4, 28.4, 28.4], backgroundColor: '#ef4444', borderRadius: 6 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 13 } } } },
                     scales: {
-                        y: { title: { display: true, text: 'Final Test Accuracy (%)', color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                        y: { title: { display: true, text: 'Test Accuracy (%)', color: '#94a3b8' }, grid: { color: '#1e293b' } },
                         x: { grid: { color: '#1e293b' } }
                     }
                 }
             });
         }
 
-        function onAlphaChange(val) {
-            document.getElementById('slider-alpha-txt').innerText = val;
-            const alpha = parseFloat(val);
-            let desc = "Moderate Non-IID";
-            if (alpha <= 0.2) desc = "Extreme Non-IID (Dominant 1-2 classes)";
-            else if (alpha >= 2.0) desc = "Near-Uniform IID Distribution";
-            document.getElementById('alpha-status-text').innerText = desc;
-            fetchDirichletSimulation(alpha);
+        function updateAlpha(val) {
+            document.getElementById('alpha-display').innerText = val;
+            const a = parseFloat(val);
+            let label = "Moderate Non-IID";
+            if (a <= 0.2) label = "Extreme Non-IID (Dominant 1-2 classes)";
+            else if (a >= 2.0) label = "Near-Uniform IID";
+            document.getElementById('alpha-label').innerText = label;
+            fetchDirichlet(a);
         }
 
-        async function fetchDirichletSimulation(alpha) {
+        async function fetchDirichlet(alpha) {
             try {
                 const res = await fetch(`/api/simulate_dirichlet?alpha=${alpha}&clients=5`);
                 const data = await res.json();
                 renderDirichletChart(data);
-                renderDirichletHeatmap(data);
             } catch (e) {
                 console.error(e);
             }
         }
 
         function renderDirichletChart(simData) {
-            const ctx = document.getElementById('chart-dirichlet').getContext('2d');
-            if (chartDirichlet) chartDirichlet.destroy();
+            const ctx = document.getElementById('dirichletChart').getContext('2d');
+            if (chartDirichletInstance) chartDirichletInstance.destroy();
 
-            const classColors = ['#ef4444', '#f97316', '#f59e0b', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
-            const datasets = simData.classes.map((cls, cIdx) => ({
+            const colors = ['#ef4444', '#f97316', '#f59e0b', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
+            const datasets = simData.classes.map((cls, idx) => ({
                 label: cls,
-                data: simData.clients.map((_, clientIdx) => simData.distribution[clientIdx][cIdx]),
-                backgroundColor: classColors[cIdx]
+                data: simData.clients.map((_, cIdx) => simData.distribution[cIdx][idx]),
+                backgroundColor: colors[idx]
             }));
 
-            chartDirichlet = new Chart(ctx, {
+            chartDirichletInstance = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: simData.clients, datasets: datasets },
                 options: {
@@ -926,95 +846,43 @@
                         x: { stacked: true, grid: { color: '#1e293b' } },
                         y: { stacked: true, title: { display: true, text: 'Sample Count', color: '#94a3b8' }, grid: { color: '#1e293b' } }
                     },
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, color: '#94a3b8', font: { size: 10 } } } }
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, color: '#94a3b8', font: { size: 11 } } } }
                 }
             });
         }
 
-        function renderDirichletHeatmap(simData) {
-            const container = document.getElementById('heatmap-container');
-            container.innerHTML = '';
-
-            // Header of classes
-            const headerRow = document.createElement('div');
-            headerRow.className = 'heatmap-row';
-            headerRow.innerHTML = `<span class="heatmap-label"></span>` + simData.classes.map(c => `<span style="width:38px; font-size:0.65rem; color:var(--text-muted); text-align:center;">${c.substring(0,3)}</span>`).join('');
-            container.appendChild(headerRow);
-
-            let maxVal = 1;
-            simData.distribution.forEach(row => row.forEach(v => { if (v > maxVal) maxVal = v; }));
-
-            simData.clients.forEach((clientName, cIdx) => {
-                const rowEl = document.createElement('div');
-                rowEl.className = 'heatmap-row';
-                let cellsHtml = `<span class="heatmap-label">${clientName}</span>`;
-                simData.distribution[cIdx].forEach(val => {
-                    const ratio = Math.min(1.0, val / maxVal);
-                    const bg = `rgba(59, 130, 246, ${Math.max(0.12, ratio.toFixed(2))})`;
-                    cellsHtml += `<div class="heatmap-cell" style="background:${bg};" title="${val} samples">${val}</div>`;
-                });
-                rowEl.innerHTML = cellsHtml;
-                container.appendChild(rowEl);
-            });
+        function applyPreset(algo, part, alpha, mal, agg, dp) {
+            document.getElementById('run-algo').value = algo;
+            document.getElementById('run-partition').value = part;
+            document.getElementById('run-alpha').value = alpha;
+            document.getElementById('run-malicious').value = mal;
+            document.getElementById('run-aggregation').value = agg;
+            document.getElementById('run-dp').value = dp ? 'true' : 'false';
         }
 
-        function renderDPChart() {
-            const ctx = document.getElementById('chart-dp').getContext('2d');
-            if (chartDP) chartDP.destroy();
-
-            const rounds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            const epsilons = rounds.map(r => (1.0 * Math.sqrt(2 * r * Math.log(1e5)) / 0.5).toFixed(2));
-
-            chartDP = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: rounds.map(r => `Round ${r}`),
-                    datasets: [{
-                        label: 'Accumulated Privacy Budget (ε) with δ=1e-5 (Lower = Stronger Privacy)',
-                        data: epsilons,
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.15)',
-                        fill: true,
-                        tension: 0.35,
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#94a3b8' } } },
-                    scales: {
-                        y: { title: { display: true, text: 'Privacy Budget ε', color: '#94a3b8' }, grid: { color: '#1e293b' } },
-                        x: { grid: { color: '#1e293b' } }
-                    }
-                }
-            });
-        }
-
-        async function executeLiveRun(e) {
+        async function handleRun(e) {
             e.preventDefault();
-            const btn = document.getElementById('fl-submit-btn');
-            const status = document.getElementById('fl-status-indicator');
-            const terminal = document.getElementById('fl-terminal');
+            const btn = document.getElementById('btn-submit');
+            const alert = document.getElementById('run-alert');
 
             btn.disabled = true;
-            status.style.color = '#38bdf8';
-            status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Executing training round...';
+            btn.innerText = 'Training in Progress (Please wait ~10-15s)...';
+            alert.style.display = 'block';
+            alert.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
+            alert.style.color = '#60a5fa';
+            alert.innerText = 'Executing 2 federated communication rounds...';
 
             const payload = {
-                algorithm: document.getElementById('fl-algo').value,
-                partition_type: document.getElementById('fl-partition').value,
-                alpha: parseFloat(document.getElementById('fl-alpha').value),
-                clients: parseInt(document.getElementById('fl-clients').value),
+                algorithm: document.getElementById('run-algo').value,
+                partition_type: document.getElementById('run-partition').value,
+                alpha: parseFloat(document.getElementById('run-alpha').value),
+                clients: parseInt(document.getElementById('run-clients').value),
                 rounds: 2,
-                malicious_fraction: parseFloat(document.getElementById('fl-malicious').value),
-                attack_type: document.getElementById('fl-attack').value,
-                aggregation: document.getElementById('fl-aggregation').value,
-                dp_enabled: document.getElementById('fl-dp').value === 'true'
+                malicious_fraction: parseFloat(document.getElementById('run-malicious').value),
+                attack_type: document.getElementById('run-attack').value,
+                aggregation: document.getElementById('run-aggregation').value,
+                dp_enabled: document.getElementById('run-dp').value === 'true'
             };
-
-            terminal.innerHTML += `\n[${new Date().toLocaleTimeString()}] Dispatching experiment: ${payload.algorithm.toUpperCase()} | Partition: ${payload.partition_type} | Aggregator: ${payload.aggregation} | DP: ${payload.dp_enabled}...`;
-            terminal.scrollTop = terminal.scrollHeight;
 
             try {
                 const res = await fetch('/api/run', {
@@ -1024,29 +892,26 @@
                 });
                 const data = await res.json();
                 btn.disabled = false;
+                btn.innerText = 'Start Training Run';
 
                 if (data.status === 'COMPLETED') {
-                    status.style.color = '#34d399';
-                    status.innerHTML = `<i class="fa-solid fa-circle-check"></i> Completed! Acc: ${data.final_accuracy}% | Loss: ${data.final_loss}`;
-                    terminal.innerHTML += `\n[${new Date().toLocaleTimeString()}] SUCCESS: Experiment ${data.experiment_id} finished!`;
-                    terminal.innerHTML += `\n -> Final Test Accuracy: ${data.final_accuracy}% | Loss: ${data.final_loss} | Macro F1: ${data.final_f1}`;
-                    terminal.scrollTop = terminal.scrollHeight;
+                    alert.style.backgroundColor = 'rgba(16, 185, 129, 0.15)';
+                    alert.style.color = '#34d399';
+                    alert.innerText = `Training Completed! Final Accuracy: ${data.final_accuracy}% | Loss: ${data.final_loss}`;
                     loadBenchmarks();
                 } else {
-                    throw new Error(data.error || 'Execution failed');
+                    throw new Error(data.error || 'Training failed');
                 }
             } catch (err) {
                 btn.disabled = false;
-                status.style.color = '#ef4444';
-                status.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Error: ${err.message}`;
-                terminal.innerHTML += `\n[${new Date().toLocaleTimeString()}] ERROR: ${err.message}`;
-                terminal.scrollTop = terminal.scrollHeight;
+                btn.innerText = 'Start Training Run';
+                alert.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+                alert.style.color = '#f87171';
+                alert.innerText = 'Error: ' + err.message;
             }
         }
 
-        // Initialize on load
         window.onload = () => {
-            fetchSystemInfo();
             loadBenchmarks();
         };
     </script>
